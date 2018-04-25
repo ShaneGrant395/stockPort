@@ -1,0 +1,88 @@
+<!--ng-controller adds our portfolio.js controller-->
+<div class="row" ng-controller="portfolioController">
+  <div class="col-md-12">
+  
+ <img src = "http://www.kinsale.ie/wp-content/uploads/2010/06/AIB.jpeg" width = 15%>
+<img src = "https://is1-ssl.mzstatic.com/image/thumb/Purple117/v4/34/39/01/3439015d-ea04-5a23-c60b-b7cf1cea19af/mzl.xfbnjyiq.png/1200x630bb.jpg" width = 15%>
+<img src = "http://is2.mzstatic.com/image/pf/us/r30/Purple7/v4/e2/03/c1/e203c1b4-ffb9-cb81-c60a-b36cf2acbe36/mzl.nqlwicjo.png" width = 15%>
+<img src = "https://logos-download.com/wp-content/uploads/2016/09/CRH_logo.png" width = 15%>
+<img src = "https://globalcoinreport.com/wp-content/uploads/2018/01/Screen-Shot-2018-01-22-at-18.07.06.png" width = 15%>
+<br>
+</br>
+<center><td><button onclick="window.location.reload()" class="btn btn-success">Reset</button></td></center>
+<br>
+</br>
+    <center><td><button type="button" class="btn btn-primary" ng-click="saveStocks()">Save</button></td></center>
+    <br/><br/>
+    <div class="alert alert-info" ng-if="message" role="alert">{{message}}</div>
+    <!--
+	  All the data relating to a single stock is now accessed via stockData, process the held array for individual lines
+	  -->
+    <div class="row">
+      <table class="table table-striped table-condensed">
+        <tr>
+          <th>Symbol</th>
+          <th>Desc</th>
+          <th>Date In</th>
+          <th>Index</th>
+          <th>Qty</th>
+          <th>Cost</th>
+          <th>Purchace Price</th>
+          <th>Price</th>
+          <th>Value</th>
+          <th>Detail Gain/Loss</th>
+          <th>% gain/loss</th>
+          <th>Sell costs</th>
+        </tr>
+        <!-- inner ng-repeat, each line held within a stock -->
+        <tbody ng-repeat="(stockSymbol, stockData) in allStocks" style="border-bottom:50px solid white;">
+          <tr ng-repeat="oneRecord in stockData.held">
+            <!--Symbol-->
+            <td>{{stockSymbol}}</td>
+            <!--Desc-->
+            <td>{{oneRecord.Name}}</td>
+            <!--Date In-->
+            <td>{{oneRecord.ts}}</td>
+            <!--Index-->
+            <td>{{oneRecord.ex}}</td>
+            <!--Quantity-->
+            <td>{{oneRecord.number}}</td>
+            <!--Original Cost-->
+            <td>{{oneRecord.cost}}</td>
+            <!--Purchase Price-->
+            <td>{{oneRecord.pps}}</td>
+            <!--Input Current Price-->
+            <td><input ng-model="oneRecord.cpps" type="number" value="{{parseFloat(oneRecord.cpps)}}" /></td>
+            <!--Current Value-->
+            <td>{{calculateValue(oneRecord)}}</td>
+            <!--Gain/Loss-->
+            <td>{{calculateGainLoss(oneRecord)}}</td>
+            <!--Percentage Gain/Loss - Hint for decimals= | number:1-->
+            <td>
+              {{calculatePercentGainLoss(oneRecord) | number:1}}%
+            </td>
+            <!--Selling Cost-->
+            <td>{{calculateSellCosts(oneRecord) | number:2}}</td>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <!--Total Quantity-->
+            <th>{{calculateQtyTotal(stockData)}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <!--Value Total-->
+            <th>{{calculateValueTotal(stockData)}}</th>
+            <!--Cumulative Gain/Loss-->
+            <th>{{gainLossTotal(stockData)}}</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
